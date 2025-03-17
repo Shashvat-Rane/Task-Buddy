@@ -1,25 +1,43 @@
-import logo from './logo.svg';
 import './App.css';
+import TaskForm from './components/TaskForm';
+import TaskList from './components/TaskList';
+import ProgressTracker from './components/ProgressTracker';
+import react,{ useState } from 'react';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+const App = () => {
+
+    const [tasks, setTasks] = useState([]);
+
+    const addTask = (task) => {
+        setTasks([...tasks,task]);
+    };
+
+    const toggleComplete = (index) => {
+        const updatedTasks = tasks.map((task,i)=>
+            i===index?{...task,completed: !task.completed}:task
+        );
+        setTasks(updatedTasks);
+    }
+
+    const deleteTask = (index) => {
+        const updatedTasks = tasks.filter((task,i) => i!==index);
+        setTasks(updatedTasks);
+    }
+
+    return (
+        <div className="App">
+            <h1>Task Buddy</h1>
+            <TaskForm addTask = {addTask}/>
+            <TaskList
+                tasks={tasks}
+                toggleComplete={toggleComplete}
+                deleteTask={deleteTask}    
+            />
+            <ProgressTracker tasks={tasks}/>
+
+        </div>
+    );
 }
 
 export default App;
